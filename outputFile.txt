@@ -1,0 +1,24 @@
+def():
+    return
+
+def myFunc
+
+    return
+def myFunc()
+    return
+
+# incorrect indentation
+while(true):
+1+1
+
+while(true):
+        1+1
+for i in list():
+i + 1
+
+#print statements
+
+print("Hello World")
+print("Hello")
+print("print()")
+print("print")
