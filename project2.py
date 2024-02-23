@@ -11,7 +11,7 @@ def copyFile(inputFileName, outputFileName):
     inputFile = open(inputFileName, "r")
     outputFile = open(outputFileName, "w")
     line = inputFile.readline()
-
+    outputFile.write(line)
     # loop through the file and write each line that is read to the output file
     for line in inputFile:
         outputFile.write(line)
