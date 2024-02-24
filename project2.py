@@ -1,8 +1,25 @@
 #Matthew
-def copyFile():
+def copyFile(inputFileName, outputFileName):
     """copies the original content of the input file to
-    the output file."""
-    pass
+    the output file.
+
+    Parameters:
+    - inputFileName (String): name of the inputFile
+    - outputFileName (String): name of the outputFile
+    """
+    # variables to open both the input and output files
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w")
+    line = inputFile.readline()
+    outputFile.write(line)
+    # loop through the file and write each line that is read to the output file
+    for line in inputFile:
+        outputFile.write(line)
+
+    # closing both files
+    inputFile.close()
+    outputFile.close()
+    
 
 #Matthew
 def functionFormater():
@@ -27,7 +44,15 @@ def outputFile():
 
 def main():
     """Main Function"""
-    pass
+    #variables to keep track of the input and output file names
+    inputFile = "testPythonFile.txt"
+    outputFile = "outputFile.txt"
+
+    #Test Code to clear outputFile
+    open('outputFile.txt', 'w').close()
+
+    # copyFile()
+    copyFile(inputFile, outputFile)
 
 if __name__ == "__main__":
     main()
