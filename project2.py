@@ -1,4 +1,5 @@
 #Matthew
+import re
 def copyFile(inputFileName, outputFileName):
     """copies the original content of the input file to
     the output file.
@@ -22,10 +23,22 @@ def copyFile(inputFileName, outputFileName):
     
 
 #Matthew
-def functionFormater():
+def functionFormater(inputFileName, outputFileName):
     """check for the def keyword and check if the function 
     header is correct if not fix it"""
-    pass
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w")
+
+    for line in inputFile:
+        defInString = re.findall(r"\b[def]", line)
+        whiteSpace = re.findalll(r"\b\s", line)
+        correctFormat = re.findall("def.+[(].+[)][:]", line)
+
+        if defInString and whiteSpace:
+            if correctFormat:
+                continue
+            else:
+                
 
 # Haimei
 def indentFormatter():

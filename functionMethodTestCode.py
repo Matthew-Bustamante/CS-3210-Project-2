@@ -1,6 +1,6 @@
 import re
 
-txt = "def myFunc(self):"
+txt = "def name (self, in):"
 
 
 # looking for characters d, e, f in the beginngin or end of string in case of white space in the beginning
@@ -10,7 +10,7 @@ defInString = re.findall(r"\b[def]", txt)
 whiteSpace = re.findall(r"\b\s", txt)
 
 # this is suppose to be the correct format of the function header
-correctFormat = re.findall("def.+[(].+[)][:]", txt)
+correctFormat = re.findall("def.+\S[(].+[)][:]", txt)
 
 #if a line contains d, e, f and has whitespace in the beginng we want to check it because it has to be a function header
 if defInString and whiteSpace:
@@ -23,9 +23,13 @@ if defInString and whiteSpace:
          print("incorrect")
   
   
-         splitString = re.split("\s", txt, maxsplit=1)
-         print(splitString)
-
+         #parameters = txt[txt.find("(")+1:txt.find(")")]
+         parathesisOne = re.search(r"\(", txt)
+         parathesisTwo = re.search(r"\)", txt)
+         #name = txt[txt.find(" ")+1:txt.find("(")]
+         print(parathesisOne.span())
+         print(parathesisTwo.span())
+         #print(name)
 # if a line doesn't contain d,e,f or whitespace in the beginning its not a function header
 else:
     print("No match")
