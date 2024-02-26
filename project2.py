@@ -86,7 +86,7 @@ def functionFormater(inputFileName, outputFileName):
                 # the span() methods used above returns tuples that contain indexes
                 # so by using these indexes we can assume the parameters are between the left and right parathesis
                 parameters = line[leftParathesis[1]:rightParathesis[0]]
-
+                
                 # by using the indexes of the whitespace after 'def' and the left parathesis or lack there of
                 # we can assume the name is between these two indexes
                 functionName = line[defInFunc[1]:whiteSpaceInFunc[0]]
@@ -95,6 +95,10 @@ def functionFormater(inputFileName, outputFileName):
                 if functionName == "":
                     functionName = "defaultName"
 
+                # if the parameters are missing commas we want to add them in
+                if "," not in parameters:
+                    parameters = re.sub(r"\s",", ", parameters)
+                    
                 # correcting the incorrect function to the correct format using the function name and parameters
                 line = "def " + functionName +"(" + parameters + "):\n"
                 print(line)
