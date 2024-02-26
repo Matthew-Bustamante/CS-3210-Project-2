@@ -1,4 +1,6 @@
 #Matthew
+import re
+
 def copyFile(inputFileName, outputFileName):
     """copies the original content of the input file to
     the output file.
@@ -34,8 +36,20 @@ def indentFormatter():
     pass
 
 # Christina
-def printCounter():
-    """Count the number of time the print keyword is used"""
+def printCounter(outputFileName):
+    """Count the number of time the print keyword is used
+
+    Parameters:
+    outputFileName (String) : name of the output 
+    """
+    # Open the output file for reading
+    with open(outputFileName, "r") as outputFile:
+        file_content =outputFile.read()
+        #using regular expresssion to find all the occurance of the print() method
+        #making sure not to count the 'print' word in the string
+        print_count = len(re.findall(r'\bprint\s*\(', file_content))
+        # return the number of times of print method occured
+        return print_count
     pass
 # Haimei
 def outputFile():
@@ -53,6 +67,10 @@ def main():
 
     # copyFile()
     copyFile(inputFile, outputFile)
+
+    #count the number of times the print keyword is used in the output file
+    print_count = printCounter(inputFile)
+    print("The numebr of times key word print is used: ", print_count)
 
 if __name__ == "__main__":
     main()
