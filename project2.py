@@ -24,119 +24,127 @@ def copyFile(inputFileName, outputFileName):
 
 #Matthew
 def functionFormater(inputFileName, outputFileName):
-    """check for the def keyword and check if the function 
-    header is correct if not fix it"""
+    """ This function checks the input file for function headers. If one is found 
+     the method will attempt to fix the header if its correct or not in order to cover as many 
+      cases as possible. """
     inputFile = open(inputFileName, "r")
     # outputFile = open(outputFileName, "w")
 
     # loop through each line in the input file
     for line in inputFile:
-        #defInString = re.findall(r"\A[def]", line)
-        #whiteSpace = re.findall(r"\b\s", line)
+        # looking of the keyword def
         defInString = "def" in line or "def " in line
 
-        # The correct form of a function header is a string that has 'def' followed by any string 
-        # followed by a left parathesis followed by any string for parameters followed by a right parathesis and colon and a new line
-        correctFormat = re.findall("def.+[(].+[)][:]\n", line)
+        # looking for a # or a '''
+        nonFunctionCharacters = re.search(r"\A#|\A'''", line)
 
-        # if the key word def is found in the line we want to check that line because it could be a function header
-        if defInString:
-            # if the function header is in our correct form we will write that line to the output file
-            # else we can assume its wrong and fix it
-            if correctFormat:
-                continue
+        # if the key word def is present and there are no # or ''' in the beginning
+        # we can assume this line is a function header
+        if defInString and nonFunctionCharacters == None:
+            #-----------ISOLATION FUNCTION NAME & FUNCTION PARAMETERS---------------
+            # The function name is usually between the def keyword and the left parathesis.
+            # Likewise the function parameters are between the left and right parathesis.
+            # By grabbing the indexes of these parts we can accurately isolate the function name and parameters
+            # however since we're using this as a guideline if any of these parts are missing we want to add them to the string
+
+
+            # this is looking for the left parathesis
+            leftParathesis = re.search(r"\(", line)
+
+            # if for some reason the left parathesis can't be found or has no index we want to add it in
+            # else using the regex span() function we want to get the index of the left parathesis
+            if leftParathesis == None:
+
+                # this is saying to subsitute whitespace with a left Parathesis and only do it once
+                line = re.sub("\s", " (", line, 1)
+                leftParathesis = re.search(r"\(", line).span()
             else:
-                # this is looking for the left parathesis
-                leftParathesis = re.search(r"\(", line)
+                leftParathesis = leftParathesis.span()
+            
+            # this is searching for a right parathesis or a colon or an empty space at the end of the string
+            rightParathesis = re.search(r"\)|\:|\s\Z", line)
 
-                # if for some reason the left parathesis can't be found or has no index we want to add it in
-                # else using the regex span() function we want to get the index of the left parathesis
-                if leftParathesis == None:
+            # if for some reason the search above can't find anything then we want to add a right parathesis
+            # else we want to get the index of the that right parathesis using the regex function span()
+            if rightParathesis == None:
+                line += ")"
+                rightParathesis = re.search(r"\)|\:|\s\Z", line).span()
+            else:
+                rightParathesis = re.search(r"\)|\:|\s\Z", line).span()
 
-                    # this is saying to subsitute whitespace with a left Parathesis and only do it once
-                    line = re.sub("\s", " (", line, 1)
-                    leftParathesis = re.search(r"\(", line).span()
-                else:
-                    leftParathesis = leftParathesis.span()
+            # this is searching for whitespace in the begining or the the left parathesis
+            whiteSpaceInFunc = re.search(r"\s\(|\(", line).span()
+
+            # this is looking for d, e, or f followed by white space in the string 
+            defInFunc = re.search(r"[def]\s", line)
+
+            # if for some reason the defInFunc can't find anything because there's no white space after 'def' we want to add it
+            # else give us the index of the whitespace using regex's function span()
+            if defInFunc == None:
+                line = line.replace("def", "def ")
+                defInFunc = defInFunc = re.search(r"[def]\s", line).span()
+            else: defInFunc = defInFunc = re.search(r"[def]\s", line).span()
+
+            # the span() methods used above returns tuples that contain indexes
+            # so by using these indexes we can assume the parameters are between the left and right parathesis
+            parameters = line[leftParathesis[1]:rightParathesis[0]]
+            
+            # by using the indexes of the whitespace after 'def' and the left parathesis or lack there of
+            # we can assume the name is between these two indexes
+            functionName = line[defInFunc[1]:whiteSpaceInFunc[0]]
+
+            # --------------------------VALIDATING FUNCTION NAME------------------------------
+
+            # special characters, numbers at the beginning and a function named def are invalid function names in python
+            # this variable searches for all of these cases and will return an object if one is found
+            invalidFunctionName = re.search(r"[!@#$%^&*-+:;,]|\d|\Adef", functionName)
+            
+            # if the function name is missing or the invalid Function Name is found
+            # we want change the name to valid name
+            if functionName == "" or invalidFunctionName != None:
+                functionName = "defaultName"
+            # -------------------------VALIDATING FUNCTION PARAMETERS-------------------------
                 
-                # this is searching for a right parathesis or a colon or an empty space at the end of the string
-                rightParathesis = re.search(r"\)|\:|\s\Z", line)
-
-                # if for some reason the search above can't find anything then we want to add a right parathesis
-                # else we want to get the index of the that right parathesis using the regex function span()
-                if rightParathesis == None:
-                    line += ")"
-                    rightParathesis = re.search(r"\)|\:|\s\Z", line).span()
-                else:
-                    rightParathesis = re.search(r"\)|\:|\s\Z", line).span()
-
-                # this is searching for whitespace in the begining or the the left parathesis
-                whiteSpaceInFunc = re.search(r"\s\(|\(", line).span()
-
-                # this is looking for d, e, or f followed by white space in the string 
-                defInFunc = re.search(r"[def]\s", line)
-
-                # if for some reason the defInFunc can't find anything because there's no white space after 'def' we want to add it
-                # else give us the index of the whitespace using regex's function span()
-                if defInFunc == None:
-                    line = line.replace("def", "def ")
-                    defInFunc = defInFunc = re.search(r"[def]\s", line).span()
-                else: defInFunc = defInFunc = re.search(r"[def]\s", line).span()
-
-                # the span() methods used above returns tuples that contain indexes
-                # so by using these indexes we can assume the parameters are between the left and right parathesis
-                parameters = line[leftParathesis[1]:rightParathesis[0]]
+            # we want to check if the parameters are syntatically correct
                 
-                # by using the indexes of the whitespace after 'def' and the left parathesis or lack there of
-                # we can assume the name is between these two indexes
-                functionName = line[defInFunc[1]:whiteSpaceInFunc[0]]
-
-                # --------------------------VALIDATING FUNCTION NAME------------------------------
-
-                # special characters, numbers at the beginning and a function named def are invalid function names in python
-                # this variable searches for all of these cases and will return an object if one is found
-                invalidFunctionName = re.search(r"[!@#$%^&*-+:;,]|\d|\Adef", functionName)
+            # here we're looking gathering all of the words between the parathesis and storing them into an array
+            numberOfParams = re.findall(r"\w+", parameters)
+            
+            # if one parameter exists we want to check if its valid
+            # else we can assume that there are more than one parameters present
+            if len(numberOfParams) == 1:
+                # removing commas if they exist
+                parameters = re.sub(r"\bdef", "", parameters)
+                parameters = re.sub(r"\,", "", parameters)
+            else:
                 
-                # if the function name is missing or the invalidFunctionName found and invalid character or sequence
-                # we want change the name to valid name
-                if functionName == "" or invalidFunctionName != None:
-                    functionName = "defaultName"
-                # -------------------------VALIDATING FUNCTION PARAMETERS-------------------------
-                    
-                # we want to check if the parameters are syntatically correct
-                    
-                # we don't want to add comas for one parameters so we're seeing how many parameters there are
-                numberOfParams = re.findall(r"\w+", parameters)
-                numberOfCommas = re.findall(r"\,", parameters)
-                # if the commas are missing and there is more than one parameter then 
-                # we want to add commas
-                if len(numberOfParams) == 1:
-                    # removing commas if they exist
-                    parameters = re.sub(r"\,", "", parameters)
-                else:
-                    parameters = ' '.join(numberOfParams)
-                    parameters = re.sub(r"\s", ", ", parameters)
-                    #print (parameterlist)
-                # if there is one parameter we want to check it for commas
-                # if there are commas at the end: we want to get rid of them
-                # we also don't want comas at the end of the parameters
-                comasAtTheEndOfParams = re.search(r",\Z", parameters)
-                if comasAtTheEndOfParams != None:
-                    parameters = re.sub(r",\Z", "", parameters)
-                
-                # searching the parameters for special charaters which are invalid in Python
+                # this is searching for special characters in the parameters as special characters are invalid
                 specialCharactersInParams = re.search(r"[!@#$%^&*-+:;]", parameters)
-
-                # if any special symbol is in the parameters we want to get rid of them
+                
+                # if a special character is found we want to delete it
                 if specialCharactersInParams != None:
                     parameters = re.sub(r"\@|\!|\@|\#|\$|\%|\^|\&|\*|\-|\+|\:|\;", "", parameters)
-                # -------------------------------------FINAL STEP--------------------------------------
+                
+                # checking if the key word def is present if so we want to delete it
+                parameters = re.sub(r"\bdef", "", parameters)
+                
+                # resetting the parameters array 
+                numberOfParams = re.findall(r"\w+", parameters)
+                # Since the parameters in the array are in the correct format all we have to do is 
+                # convert the array to a string and replace the white space with commas
+                parameters = ' '.join(numberOfParams)
+                parameters = re.sub(r"\s", ", ", parameters)
+            
+            # if there are commas at the end: we want to get rid of them
+            comasAtTheEndOfParams = re.search(r",\Z", parameters)
+            if comasAtTheEndOfParams != None:
+                parameters = re.sub(r",\Z", "", parameters)
+            
+            # -------------------------------------FINAL STEP--------------------------------------
 
-                # correcting the incorrect function to the correct format using the function name and parameters
-                line = "def " + functionName +"(" + parameters + "):\n"
-                print(line)
-        else:
-              continue
+            # correcting the incorrect function to the correct format using the function name and parameters
+            line = "def " + functionName +"(" + parameters + "):\n"
+            print(line)
               #print(line)
 
 # Haimei
