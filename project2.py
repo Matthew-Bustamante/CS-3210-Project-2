@@ -91,14 +91,58 @@ def functionFormater(inputFileName, outputFileName):
                 # we can assume the name is between these two indexes
                 functionName = line[defInFunc[1]:whiteSpaceInFunc[0]]
 
-                # if for some reason the function name is not present we want to give the function a default name
-                if functionName == "":
-                    functionName = "defaultName"
+                # --------------------------VALIDATING FUNCTION NAME------------------------------
 
-                # if the parameters are missing commas we want to add them in
-                if "," not in parameters:
-                    parameters = re.sub(r"\s",", ", parameters)
+                # special characters, numbers at the beginning and a function named def are invalid function names in python
+                # this variable searches for all of these cases and will return an object if one is found
+                invalidFunctionName = re.search(r"[!@#$%^&*-+:;,]|\d|\Adef", functionName)
+                
+                # if the function name is missing or the invalidFunctionName found and invalid character or sequence
+                # we want change the name to valid name
+                if functionName == "" or invalidFunctionName != None:
+                    functionName = "defaultName"
+                # -------------------------VALIDATING FUNCTION PARAMETERS-------------------------
                     
+                # we want to check if the parameters are syntatically correct
+                    
+                # we don't want to add comas for one parameters so we're seeing how many parameters there are
+                numberOfParams = re.findall(r"\w+", parameters)
+
+                
+                # if the commas are missing and there is more than one parameter then 
+                # we want to add commas
+                if "," not in parameters and len(numberOfParams) > 1:
+                    # subsituting white space for commas
+                    parameters = re.sub(r"\s",", ", parameters)
+                    # getting rid of single commas that may exist
+                    parameters = re.sub(r"\B,", "", parameters)
+                    #parameters = re.sub(r"\A ", "", parameters)
+                    #print (parameterlist)
+                # if there is one parameter we want to check it for commas
+                if len(numberOfParams) == 1:
+                    # removing commas if they exist
+                    parameters = re.sub(r"\,", "", parameters)
+                else:
+                    for index, value in enumerate(numberOfParams):
+                        if ', ' not in value:
+                            newValue  = value + ','
+                            parameters = parameters.replace(value, newValue)
+                        if index + 1 == len(numberOfParams):
+                            parameters = re.sub(r",\Z", "", parameters)
+                # if there are commas at the end: we want to get rid of them
+                # we also don't want comas at the end of the parameters
+                comasAtTheEndOfParams = re.search(r",\Z", parameters)
+                if comasAtTheEndOfParams != None:
+                    parameters = re.sub(r",\Z", "", parameters)
+                
+                # searching the parameters for special charaters which are invalid in Python
+                specialCharactersInParams = re.search(r"[!@#$%^&*-+:;]", parameters)
+
+                # if any special symbol is in the parameters we want to get rid of them
+                if specialCharactersInParams != None:
+                    parameters = re.sub(r"\@|\!|\@|\#|\$|\%|\^|\&|\*|\-|\+|\:|\;", "", parameters)
+                # -------------------------------------FINAL STEP--------------------------------------
+
                 # correcting the incorrect function to the correct format using the function name and parameters
                 line = "def " + functionName +"(" + parameters + "):\n"
                 print(line)
@@ -136,14 +180,14 @@ def outputFile():
 def main():
     """Main Function"""
     #variables to keep track of the input and output file names
-    inputFile = "testPythonFile.txt"
+    inputFile = "defTest.txt"
     outputFile = "outputFile.txt"
 
     #Test Code to clear outputFile
     open('outputFile.txt', 'w').close()
 
     # copyFile()
-    copyFile(inputFile, outputFile)
+    #copyFile(inputFile, outputFile)
     functionFormater(inputFile, outputFile)
 
     #count the number of times the print keyword is used in the output file
