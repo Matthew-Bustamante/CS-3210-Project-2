@@ -107,28 +107,19 @@ def functionFormater(inputFileName, outputFileName):
                     
                 # we don't want to add comas for one parameters so we're seeing how many parameters there are
                 numberOfParams = re.findall(r"\w+", parameters)
-
-                
+                numberOfCommas = re.findall(r"\,", parameters)
                 # if the commas are missing and there is more than one parameter then 
                 # we want to add commas
-                if "," not in parameters and len(numberOfParams) > 1:
-                    # subsituting white space for commas
-                    parameters = re.sub(r"\s",", ", parameters)
-                    # getting rid of single commas that may exist
-                    parameters = re.sub(r"\B,", "", parameters)
-                    #parameters = re.sub(r"\A ", "", parameters)
-                    #print (parameterlist)
-                # if there is one parameter we want to check it for commas
                 if len(numberOfParams) == 1:
                     # removing commas if they exist
                     parameters = re.sub(r"\,", "", parameters)
-                else:
-                    for index, value in enumerate(numberOfParams):
-                        if ', ' not in value:
-                            newValue  = value + ','
-                            parameters = parameters.replace(value, newValue)
-                        if index + 1 == len(numberOfParams):
-                            parameters = re.sub(r",\Z", "", parameters)
+                elif "," not in parameters or len(numberOfCommas) -1 != len(numberOfParams):
+                    # subsituting white space for commas
+                    parameters = re.sub(r"\s",", ", parameters)
+                    # getting rid of single commas that may exist
+                    parameters = re.sub(r"\A,", "", parameters)
+                    #print (parameterlist)
+                # if there is one parameter we want to check it for commas
                 # if there are commas at the end: we want to get rid of them
                 # we also don't want comas at the end of the parameters
                 comasAtTheEndOfParams = re.search(r",\Z", parameters)
