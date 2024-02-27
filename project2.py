@@ -113,11 +113,9 @@ def functionFormater(inputFileName, outputFileName):
                 if len(numberOfParams) == 1:
                     # removing commas if they exist
                     parameters = re.sub(r"\,", "", parameters)
-                elif "," not in parameters or len(numberOfCommas) -1 != len(numberOfParams):
-                    # subsituting white space for commas
-                    parameters = re.sub(r"\s",", ", parameters)
-                    # getting rid of single commas that may exist
-                    parameters = re.sub(r"\A,", "", parameters)
+                else:
+                    parameters = ' '.join(numberOfParams)
+                    parameters = re.sub(r"\s", ", ", parameters)
                     #print (parameterlist)
                 # if there is one parameter we want to check it for commas
                 # if there are commas at the end: we want to get rid of them
