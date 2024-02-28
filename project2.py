@@ -36,10 +36,11 @@ def indentFormatter(inputFileName, outputFileName):
     inputFile = open(inputFileName, "r")
     outputFile = open(outputFileName, "w")
     indentLevel = 0
+    indentSpaceNum = 4
     for line in inputFile:
-        # check if the line is indented correctly
-        if not ((line.startswith("    " * indentLevel) or line.startswith("/t" * indentLevel)) and
-                not (line.startswith("    " * (indentLevel + 1)) or line.startswith("/t" * (indentLevel + 1)))):
+        # check if the line is indented correctly, i.e., check if the line starts with the correct number of spaces accurately
+        if not ((line.startswith(" " * indentSpaceNum * indentLevel) or line.startswith("\t" * indentLevel)) and
+                not (line.startswith(" " * (indentSpaceNum * indentLevel + 1)) or line.startswith("\t" * (indentLevel + 1)))):
             line = "    " * indentLevel + line.lstrip()
 
         # check if the line ends with a colon
