@@ -28,6 +28,7 @@ def functionFormater(inputFileName, outputFileName):
      the method will attempt to fix the header if its correct or not in order to cover as many 
       cases as possible. """
     inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w")
     # outputFile = open(outputFileName, "w")
 
     # loop through each line in the input file
@@ -171,9 +172,10 @@ def functionFormater(inputFileName, outputFileName):
 
             # correcting the incorrect function to the correct format using the function name and parameters
             line = "def " + functionName +"(" + parameters + "):\n"
-            print(line)
+            outputFile.write(line)
               #print(line)
-
+        else:
+            outputFile.write(line)
 # Haimei
 def indentFormatter():
     """check if a colon is being used if so check he indent

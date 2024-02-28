@@ -1,9 +1,0 @@
-    def my_function()
-    def my_function param1, param2:
-    def 123_function():
-    def (): 
-    def def():
-    def my_function(param@, param2):
-    def my_function:
-    
-    def def(def, ed)
