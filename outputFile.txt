@@ -4,18 +4,28 @@ def defaultName():
 
 def defaultName(myFunc):
 
+
     return
 def myFunc():
-    return
+  return
+
+return
+def myFunc()
+  return
+
 
 # incorrect indentation
 while(true):
-1+1
+    1+1
 
 while(true):
-        1+1
+    1+1
+    for i in list():
+        i + 1
+        for i in list():
+            i + 1
 for i in list():
-i + 1
+    i + 1
 
 #print statements
 

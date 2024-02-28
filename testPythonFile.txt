@@ -13,8 +13,12 @@ while(true):
 1+1
 
 while(true):
-        1+1
-for i in list():
+    1+1
+   for i in list():
+        i + 1
+       for i in list():
+       i + 1
+  for i in list():
 i + 1
 
 #print statements
