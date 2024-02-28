@@ -4,15 +4,9 @@ def defaultName():
 
 def defaultName(myFunc):
 
-
     return
 def myFunc():
-  return
-
-return
-def myFunc()
-  return
-
+    return
 
 # incorrect indentation
 while(true):

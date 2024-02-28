@@ -176,6 +176,8 @@ def functionFormater(inputFileName, outputFileName):
               #print(line)
         else:
             outputFile.write(line)
+    inputFile.close()
+    outputFile.close()
 # Haimei
 def indentFormatter(inputFileName, outputFileName):
     """
@@ -249,22 +251,24 @@ def main():
 
     #Test Code to clear outputFile
     # no need if we are using the w mode to open the file
-    # open('outputFile.txt', 'w').close()
+    #open('outputFile.txt', 'w').close()
 
     # copyFile()
 
+
+    
     #copyFile(inputFile, outputFile)
     functionFormater(inputFile, outputFile)
+    # update input file with current changes
+    copyFile(outputFile, inputFile)
+    # indentFormatter()
+    indentFormatter(inputFile, outputFile)
 
-    # copyFile(inputFile, outputFile)
-
+    
 
     #count the number of times the print keyword is used in the output file
     print_count = printCounter(inputFile)
     print("The numebr of times key word print is used: ", print_count)
-
-    # indentFormatter()
-    indentFormatter(inputFile, outputFile)
 
 if __name__ == "__main__":
     main()
