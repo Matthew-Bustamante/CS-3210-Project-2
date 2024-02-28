@@ -113,32 +113,59 @@ def functionFormater(inputFileName, outputFileName):
             # if one parameter exists we want to check if its valid
             # else we can assume that there are more than one parameters present
             if len(numberOfParams) == 1:
-                # removing commas if they exist
+                # checking for the key word def and removing it if present
                 parameters = re.sub(r"\bdef", "", parameters)
+
+                #checking for any commas and removing them if present
                 parameters = re.sub(r"\,", "", parameters)
+
+                #checking for any special characters if present and removing them
+                parameters = re.sub(r"\@|\!|\@|\#|\$|\%|\^|\&|\*|\-|\+|\:|\;", "", parameters)
+                #checking for numbers in the beginining or middle of the strin and removing them
+                parameters = re.sub(r"\b\d|\d\B", "", parameters)
+                
             else:
-                
-                # this is searching for special characters in the parameters as special characters are invalid
-                specialCharactersInParams = re.search(r"[!@#$%^&*-+:;]", parameters)
-                
-                # if a special character is found we want to delete it
-                if specialCharactersInParams != None:
-                    parameters = re.sub(r"\@|\!|\@|\#|\$|\%|\^|\&|\*|\-|\+|\:|\;", "", parameters)
-                
+                # checking for numbers in the beginning and removing them
+                parameters = re.sub(r"\b\d|\d\B", "", parameters)
+                # checking for special characters and removing them if present
+                parameters = re.sub(r"\@|\!|\@|\#|\$|\%|\^|\&|\*|\-|\+|\:|\;", "", parameters)
                 # checking if the key word def is present if so we want to delete it
                 parameters = re.sub(r"\bdef", "", parameters)
-                
-                # resetting the parameters array 
+                # reseting the array to corrected form
                 numberOfParams = re.findall(r"\w+", parameters)
-                # Since the parameters in the array are in the correct format all we have to do is 
-                # convert the array to a string and replace the white space with commas
+                
+                # number to keep track of the number of params
+                paramNumber = 0
+
+                #checking for duplicating parameters
+                for index, name in enumerate(numberOfParams):
+                    
+                    duplication = 0
+                    for nameComparison in numberOfParams:
+                        if name == nameComparison:
+                            paramNumber += 1
+                            duplication += 1
+                        # a duplicate is found
+                        if duplication > 1:
+                            newParameter = numberOfParams[index] + str(paramNumber)
+                            numberOfParams[index] = newParameter
+                            # parameters = parameters.replace(name, newParameter, 1)
+                            parameters = ' '.join(numberOfParams)
+                            break
+                
+                
+                # resetting the array
+                numberOfParams = re.findall(r"\w+", parameters)
+
+                #transforming the array into a string
                 parameters = ' '.join(numberOfParams)
+
+                # replacing the white space in the string with commas
                 parameters = re.sub(r"\s", ", ", parameters)
-            
+                
+
             # if there are commas at the end: we want to get rid of them
-            comasAtTheEndOfParams = re.search(r",\Z", parameters)
-            if comasAtTheEndOfParams != None:
-                parameters = re.sub(r",\Z", "", parameters)
+            parameters = re.sub(r",\Z", "", parameters)
             
             # -------------------------------------FINAL STEP--------------------------------------
 
@@ -177,7 +204,7 @@ def outputFile():
 def main():
     """Main Function"""
     #variables to keep track of the input and output file names
-    inputFile = "defTest.txt"
+    inputFile = "testPythonFile.txt"
     outputFile = "outputFile.txt"
 
     #Test Code to clear outputFile
