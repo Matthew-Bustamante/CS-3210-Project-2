@@ -30,10 +30,29 @@ def functionFormater():
     pass
 
 # Haimei
-def indentFormatter():
+def indentFormatter(inputFileName, outputFileName):
     """check if a colon is being used if so check he indent
     and if its wrong fix it"""
-    pass
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w")
+    indentLevel = 0
+    for line in inputFile:
+        # check if the line is indented correctly
+        if not ((line.startswith("    " * indentLevel) or line.startswith("/t" * indentLevel)) and
+                not (line.startswith("    " * (indentLevel + 1)) or line.startswith("/t" * (indentLevel + 1)))):
+            line = "    " * indentLevel + line.lstrip()
+
+        # check if the line ends with a colon
+        if line.rstrip().endswith(":"):
+            indentLevel += 1
+        # or check if out of the block posibly
+        elif not line[0] not in (" ", "\t"):
+            indentLevel = 0
+        outputFile.write(line)
+
+    # close the files
+    inputFile.close()
+    outputFile.close()
 
 # Christina
 def printCounter(outputFileName):
@@ -63,14 +82,18 @@ def main():
     outputFile = "outputFile.txt"
 
     #Test Code to clear outputFile
-    open('outputFile.txt', 'w').close()
+    # no need if we are using the w mode to open the file
+    # open('outputFile.txt', 'w').close()
 
     # copyFile()
-    copyFile(inputFile, outputFile)
+    # copyFile(inputFile, outputFile)
 
     #count the number of times the print keyword is used in the output file
     print_count = printCounter(inputFile)
     print("The numebr of times key word print is used: ", print_count)
+
+    # indentFormatter()
+    indentFormatter(inputFile, outputFile)
 
 if __name__ == "__main__":
     main()
