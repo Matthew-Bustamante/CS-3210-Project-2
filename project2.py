@@ -31,24 +31,42 @@ def functionFormater():
 
 # Haimei
 def indentFormatter(inputFileName, outputFileName):
-    """check if a colon is being used if so check he indent
-    and if its wrong fix it"""
+    """
+    check if a colon is being used if so check he indent
+    and if its wrong fix it
+    Assume a line starts with multi spaces or tabs
+    If the space number is larger 3 than a multiple of 4, we assume it is caused by typo of a 4-space
+    """
     inputFile = open(inputFileName, "r")
     outputFile = open(outputFileName, "w")
     indentLevel = 0
     indentSpaceNum = 4
+    forceIndent = False
     for line in inputFile:
+        if re.match(r"^(?:[\s\t]*\r?\n|[\s\t]*#.*)$", line):
+            outputFile.write(line)
+            continue
         # check if the line is indented correctly, i.e., check if the line starts with the correct number of spaces accurately
-        if not ((line.startswith(" " * indentSpaceNum * indentLevel) or line.startswith("\t" * indentLevel)) and
-                not (line.startswith(" " * (indentSpaceNum * indentLevel + 1)) or line.startswith("\t" * (indentLevel + 1)))):
-            line = "    " * indentLevel + line.lstrip()
+        if forceIndent:
+            forceIndent = False
+            if re.match(r"^[\ ]*", line).end() != indentLevel * indentSpaceNum or re.match(r"^[\t]*", line).end() != indentLevel:
+                line = " " * (indentLevel * indentSpaceNum) + line.lstrip()
+        else:
+            if line[0] == " ":
+                # If the space number is larger 3 than a multiple of 4, we assume it is caused by typo of a 4-space
+                currIndentLevel = (re.match(r"^[\ ]*", line).end() + 1 ) // indentSpaceNum
+            elif line[0] == "\t":
+                currIndentLevel = re.match(r"^[\t]*", line).end()
+            else:
+                currIndentLevel = 0
+            if currIndentLevel < indentLevel:
+                indentLevel = currIndentLevel
+            line = " " * (indentLevel * indentSpaceNum) + line.lstrip()
 
         # check if the line ends with a colon
         if line.rstrip().endswith(":"):
             indentLevel += 1
-        # or check if out of the block posibly
-        elif not line[0] not in (" ", "\t"):
-            indentLevel = 0
+            forceIndent = True
         outputFile.write(line)
 
     # close the files
