@@ -1,11 +1,11 @@
 # incorrect python functions
-def():
+def defaultName():
     return
 
-def myFunc
+def defaultName(myFunc):
 
     return
-def myFunc()
+def myFunc():
     return
 
 # incorrect indentation
