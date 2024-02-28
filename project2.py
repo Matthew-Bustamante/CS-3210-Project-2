@@ -30,10 +30,48 @@ def functionFormater():
     pass
 
 # Haimei
-def indentFormatter():
-    """check if a colon is being used if so check he indent
-    and if its wrong fix it"""
-    pass
+def indentFormatter(inputFileName, outputFileName):
+    """
+    check if a colon is being used if so check he indent
+    and if its wrong fix it
+    Assume a line starts with multi spaces or tabs
+    If the space number is larger 3 than a multiple of 4, we assume it is caused by typo of a 4-space
+    """
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w")
+    indentLevel = 0
+    indentSpaceNum = 4
+    forceIndent = False
+    for line in inputFile:
+        if re.match(r"^(?:[\s\t]*\r?\n|[\s\t]*#.*)$", line):
+            outputFile.write(line)
+            continue
+        # check if the line is indented correctly, i.e., check if the line starts with the correct number of spaces accurately
+        if forceIndent:
+            forceIndent = False
+            if re.match(r"^[\ ]*", line).end() != indentLevel * indentSpaceNum or re.match(r"^[\t]*", line).end() != indentLevel:
+                line = " " * (indentLevel * indentSpaceNum) + line.lstrip()
+        else:
+            if line[0] == " ":
+                # If the space number is larger 3 than a multiple of 4, we assume it is caused by typo of a 4-space
+                currIndentLevel = (re.match(r"^[\ ]*", line).end() + 1 ) // indentSpaceNum
+            elif line[0] == "\t":
+                currIndentLevel = re.match(r"^[\t]*", line).end()
+            else:
+                currIndentLevel = 0
+            if currIndentLevel < indentLevel:
+                indentLevel = currIndentLevel
+            line = " " * (indentLevel * indentSpaceNum) + line.lstrip()
+
+        # check if the line ends with a colon
+        if line.rstrip().endswith(":"):
+            indentLevel += 1
+            forceIndent = True
+        outputFile.write(line)
+
+    # close the files
+    inputFile.close()
+    outputFile.close()
 
 # Christina
 def printCounter(outputFileName):
@@ -63,14 +101,18 @@ def main():
     outputFile = "outputFile.txt"
 
     #Test Code to clear outputFile
-    open('outputFile.txt', 'w').close()
+    # no need if we are using the w mode to open the file
+    # open('outputFile.txt', 'w').close()
 
     # copyFile()
-    copyFile(inputFile, outputFile)
+    # copyFile(inputFile, outputFile)
 
     #count the number of times the print keyword is used in the output file
     print_count = printCounter(inputFile)
     print("The numebr of times key word print is used: ", print_count)
+
+    # indentFormatter()
+    indentFormatter(inputFile, outputFile)
 
 if __name__ == "__main__":
     main()
