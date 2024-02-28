@@ -239,9 +239,19 @@ def printCounter(outputFileName):
         return print_count
     pass
 # Haimei
-def outputFile():
+def outputFile(inputFileName, outputFileName):
     """Output The New File to the output file"""
-    pass
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "w+")
+    line = inputFile.readline()
+    outputFile.write(line)
+    # loop through the file and write each line that is read to the output file
+    for line in outputFile:
+        outputFile.write(line)
+
+    # closing both files
+    inputFile.close()
+    outputFile.close()
 
 def main():
     """Main Function"""
