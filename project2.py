@@ -260,12 +260,15 @@ def copyInputFile(inputFileName, outputFileName):
 
 def main():
     """Main Function"""
-    #variables to keep track of the input, temp, and output file names
+    # The way our program works is by having three files, an input file, a temp file, and an output file
+    # Our program uses the temp file to keep track of changes made to the output file
+
+    # variables to keep track of the input, temp, and output file names
     inputFile = "inputFile.txt"
     tempFile = "tempFile.txt"
     outputFile = "outputFile.txt"
 
-    # this clears out the output file and temp file to ensure a clean run works
+    # this clears out the output file and the temp file to ensure a clean run works
     open('outputFile.txt', 'w').close()
     open('tempFile.txt', 'w').close
 
@@ -288,7 +291,7 @@ def main():
     print_count = printCounter(tempFile)
     print("The numebr of times key word print is used: ", print_count)
 
-    # copy the original input file to the output file
+    # copy the input file to the output file
     copyInputFile(inputFile, outputFile)
 
 if __name__ == "__main__":
