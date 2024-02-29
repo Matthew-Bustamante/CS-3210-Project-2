@@ -1,0 +1,49 @@
+# --------incorrect python functions---------
+
+# Missing function name
+def defaultName():
+    return
+
+# missing function parameters
+def defaultName(myFunc):
+    return
+
+# missing colon
+def myFunc():
+    return
+
+# invalid function name
+def defaultName():
+    return
+
+# function name is def
+def defaultName():
+    return
+
+# invalid parameters
+def myFunc(param, var):
+    return
+
+# parameters with the same name
+def myFunc(param2, param4, param6, param):
+    return
+
+# function missing name, parameters, parathesis, and colon
+def defaultName():
+    return
+
+# ---------incorrect indentation-----------
+while(true):
+    1+1
+
+while(true):
+    1+1
+for i in list():
+    i + 1
+
+# ----------print statements--------------
+
+print("Hello World")
+print("Hello")
+print("print()")
+print("print")
