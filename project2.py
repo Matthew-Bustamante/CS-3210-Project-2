@@ -238,37 +238,61 @@ def printCounter(outputFileName):
         # return the number of times of print method occured
         return print_count
     pass
-# Haimei
-def outputFile():
-    """Output The New File to the output file"""
-    pass
+
+def copyInputFile(inputFileName, outputFileName):
+    """copies the original input file and puts it at the end of the output file"""
+    # opening the the input and output files
+    inputFile = open(inputFileName, "r")
+    outputFile = open(outputFileName, "a")
+    # writing a new line
+    # adding a line to separate the new code and the old code
+    outputFile.write("\n----------------------ORIGINAL FILE----------------------\n")
+    line = inputFile.readline()
+    outputFile.write(line)
+    # loop through the file and write each line that is read to the output file
+    for line in inputFile:
+        outputFile.write(line)
+    outputFile.write("\n---------------------------------------------------------")
+    
+    # closing both files
+    inputFile.close()
+    outputFile.close()
 
 def main():
     """Main Function"""
-    #variables to keep track of the input and output file names
-    inputFile = "testPythonFile.txt"
+    # The way our program works is by having three files, an input file, a temp file, and an output file
+    # Our program uses the temp file to keep track of changes made to the output file
+
+    # variables to keep track of the input, temp, and output file names
+    inputFile = "inputFile.txt"
+    tempFile = "tempFile.txt"
     outputFile = "outputFile.txt"
 
-    #Test Code to clear outputFile
-    # no need if we are using the w mode to open the file
-    #open('outputFile.txt', 'w').close()
+    # this clears out the output file and the temp file to ensure a clean run works
+    open('outputFile.txt', 'w').close()
+    open('tempFile.txt', 'w').close
 
-    # copyFile()
+    # copying the contents of the input file to the temp file
+    copyFile(inputFile, tempFile)
 
+    # formating incorrect functions
+    functionFormater(tempFile, outputFile)
 
-    
-    #copyFile(inputFile, outputFile)
-    functionFormater(inputFile, outputFile)
-    # update input file with current changes
-    copyFile(outputFile, inputFile)
-    # indentFormatter()
-    indentFormatter(inputFile, outputFile)
+    # update temp file with current changes of the outputFile
+    copyFile(outputFile, tempFile)
 
-    
+    # formating incorrect indentation
+    indentFormatter(tempFile, outputFile)
+
+    # updating the tempFile with the current changes of the outputFile
+    copyFile(outputFile, tempFile)
 
     #count the number of times the print keyword is used in the output file
-    print_count = printCounter(inputFile)
+    print_count = printCounter(tempFile)
     print("The numebr of times key word print is used: ", print_count)
+
+    # copy the input file to the output file
+    copyInputFile(inputFile, outputFile)
 
 if __name__ == "__main__":
     main()
