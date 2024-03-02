@@ -234,7 +234,7 @@ def printCounter(outputFileName):
         file_content =outputFile.read()
         #using regular expresssion to find all the occurance of the print() method
         #making sure not to count the 'print' word in the string
-        print_count = len(re.findall(r'\bprint\s*\(', file_content))
+        print_count = len(re.findall(r'\bprint\b(?!\s*\()', file_content))
         # return the number of times of print method occured
         return print_count
     pass
@@ -289,7 +289,7 @@ def main():
 
     #count the number of times the print keyword is used in the output file
     print_count = printCounter(tempFile)
-    print("The numebr of times key word print is used: ", print_count)
+    print("The number of times the keyword print is used: ", print_count)
 
     # copy the input file to the output file
     copyInputFile(inputFile, outputFile)
