@@ -223,21 +223,41 @@ def indentFormatter(inputFileName, outputFileName):
     outputFile.close()
 
 # Christina
-def printCounter(outputFileName):
-    """Count the number of time the print keyword is used
+def is_print_function_call(line):
+    """Check if the line contains a print function call in the format print("...").
 
     Parameters:
-    outputFileName (String) : name of the output 
+    - line (String): a line from the input file
+
+    Returns:
+    - Boolean: True if the line contains a print function call following the specified pattern, False otherwise
     """
-    # Open the output file for reading
-    with open(outputFileName, "r") as outputFile:
-        file_content =outputFile.read()
-        #using regular expresssion to find all the occurance of the print() method
-        #making sure not to count the 'print' word in the string
-        print_count = len(re.findall(r'\bprint\s*\(', file_content))
-        # return the number of times of print method occured
-        return print_count
-    pass
+    # Define the regular expression pattern
+    pattern = r'\bprint\s*\(\s*".*?"\s*\)'
+    # Check if the line matches the pattern
+    return bool(re.search(pattern, line))
+
+def printCounter(inputFileName, outputFileName):
+    """Count the number of times the print method is used in the input file.
+
+    Parameters:
+    - inputFileName (String): name of the input file
+    """
+    # Open the input file for reading
+    outputFile = open(outputFileName, "a")
+    with open(inputFileName, "r") as inputFile:
+        # Initialize count to store the number of print occurrences
+        print_count = 0
+        # Iterate through each line in the input file
+        for line in inputFile:
+            # Check if the line contains a print function call in the specified format
+            if is_print_function_call(line):
+                print_count += 1
+    # Return the count of print occurrences
+    outputFile.write("\nThe number of times the keyword print is used: " + str(print_count))
+    outputFile.close()
+    inputFile.close()
+    
 
 def copyInputFile(inputFileName, outputFileName):
     """copies the original input file and puts it at the end of the output file"""
@@ -288,8 +308,8 @@ def main():
     copyFile(outputFile, tempFile)
 
     #count the number of times the print keyword is used in the output file
-    print_count = printCounter(tempFile)
-    print("The numebr of times key word print is used: ", print_count)
+    print_count = printCounter(tempFile, outputFile)
+   
 
     # copy the input file to the output file
     copyInputFile(inputFile, outputFile)
