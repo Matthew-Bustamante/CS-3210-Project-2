@@ -223,7 +223,37 @@ def indentFormatter(inputFileName, outputFileName):
     outputFile.close()
 
 # Christina
-git push origin main:main
+def is_print_function_call(line):
+    """Check if the line contains a print function call in the format print("...").
+
+    Parameters:
+    - line (String): a line from the input file
+
+    Returns:
+    - Boolean: True if the line contains a print function call following the specified pattern, False otherwise
+    """
+    # Define the regular expression pattern
+    pattern = r'\bprint\s*\(\s*".*?"\s*\)'
+    # Check if the line matches the pattern
+    return bool(re.search(pattern, line))
+
+def printCounter(inputFileName):
+    """Count the number of times the print method is used in the input file.
+
+    Parameters:
+    - inputFileName (String): name of the input file
+    """
+    # Open the input file for reading
+    with open(inputFileName, "r") as inputFile:
+        # Initialize count to store the number of print occurrences
+        print_count = 0
+        # Iterate through each line in the input file
+        for line in inputFile:
+            # Check if the line contains a print function call in the specified format
+            if is_print_function_call(line):
+                print_count += 1
+    # Return the count of print occurrences
+    return print_count
     pass
 
 def copyInputFile(inputFileName, outputFileName):
