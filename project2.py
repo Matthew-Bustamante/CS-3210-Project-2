@@ -237,13 +237,14 @@ def is_print_function_call(line):
     # Check if the line matches the pattern
     return bool(re.search(pattern, line))
 
-def printCounter(inputFileName):
+def printCounter(inputFileName, outputFileName):
     """Count the number of times the print method is used in the input file.
 
     Parameters:
     - inputFileName (String): name of the input file
     """
     # Open the input file for reading
+    outputFile = open(outputFileName, "a")
     with open(inputFileName, "r") as inputFile:
         # Initialize count to store the number of print occurrences
         print_count = 0
@@ -253,8 +254,10 @@ def printCounter(inputFileName):
             if is_print_function_call(line):
                 print_count += 1
     # Return the count of print occurrences
-    return print_count
-    pass
+    outputFile.write("\nThe number of times the keyword print is used" + str(print_count))
+    outputFile.close()
+    inputFile.close()
+    
 
 def copyInputFile(inputFileName, outputFileName):
     """copies the original input file and puts it at the end of the output file"""
@@ -305,8 +308,8 @@ def main():
     copyFile(outputFile, tempFile)
 
     #count the number of times the print keyword is used in the output file
-    print_count = printCounter(tempFile)
-    print("The number of times the keyword print is used: ", print_count)
+    print_count = printCounter(tempFile, outputFile)
+   
 
     # copy the input file to the output file
     copyInputFile(inputFile, outputFile)
