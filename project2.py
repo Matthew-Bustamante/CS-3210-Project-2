@@ -254,7 +254,7 @@ def printCounter(inputFileName, outputFileName):
             if is_print_function_call(line):
                 print_count += 1
     # Return the count of print occurrences
-    outputFile.write("\nThe number of times the keyword print is used" + str(print_count))
+    outputFile.write("\nThe number of times the keyword print is used: " + str(print_count))
     outputFile.close()
     inputFile.close()
     
