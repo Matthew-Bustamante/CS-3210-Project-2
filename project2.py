@@ -1,5 +1,7 @@
-# Importing Python Regex class
+# Importing Python Regex class for string handling
 import re
+
+# Importing Python OS class specifically to delete files
 import os
 def copyFile(inputFileName, outputFileName):
     """copies the original content of the input file to
@@ -26,8 +28,7 @@ def copyFile(inputFileName, outputFileName):
 #Matthew
 def functionFormater(inputFileName, outputFileName):
     """ This function checks the input file for function headers. If one is found 
-     the method will attempt to fix the header if its correct or not in order to cover as many 
-      cases as possible. """
+     the method will attempt to fix the header regardless if its correct or not. """
     inputFile = open(inputFileName, "r")
     outputFile = open(outputFileName, "w")
     # outputFile = open(outputFileName, "w")
@@ -282,7 +283,7 @@ def copyInputFile(inputFileName, outputFileName):
 def main():
     """Main Function"""
     # The way our program works is by having three files, an input file, a temp file, and an output file
-    # Our program uses the temp file to keep track of changes made to the output file
+    # Our program will create a temp file and uses it to keep track of changes made to the output file
 
     # variables to keep track of the input and output file names
     inputFile = input("Enter Input File Name: ")
@@ -310,7 +311,7 @@ def main():
     # updating the tempFile with the current changes of the outputFile
     copyFile(outputFile, tempFile)
 
-    #count the number of times the print keyword is used in the output file
+    # count the number of times the print keyword is used in the output file
     printCounter(tempFile, outputFile)
    
 
@@ -319,6 +320,8 @@ def main():
 
     # deleting the temp file
     os.remove("tempFile.txt")
+    
     print("Done")
+
 if __name__ == "__main__":
     main()
