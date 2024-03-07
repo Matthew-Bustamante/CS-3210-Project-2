@@ -47,6 +47,8 @@ print("Hello World")
 print("Hello")
 print("print()")
 print("print")
+# print()
+The number of times the keyword print is used: 4
 ----------------------ORIGINAL FILE----------------------
 # --------incorrect python functions---------
 
@@ -97,4 +99,5 @@ print("Hello World")
 print("Hello")
 print("print()")
 print("print")
+# print()
 ---------------------------------------------------------

@@ -1,5 +1,6 @@
-#Matthew
+# Importing Python Regex class
 import re
+import os
 def copyFile(inputFileName, outputFileName):
     """copies the original content of the input file to
     the output file.
@@ -283,14 +284,16 @@ def main():
     # The way our program works is by having three files, an input file, a temp file, and an output file
     # Our program uses the temp file to keep track of changes made to the output file
 
-    # variables to keep track of the input, temp, and output file names
-    inputFile = "inputFile.txt"
-    tempFile = "tempFile.txt"
-    outputFile = "outputFile.txt"
+    # variables to keep track of the input and output file names
+    inputFile = input("Enter Input File Name: ")
+    outputFile = input("Enter Output File Name: ")
 
-    # this clears out the output file and the temp file to ensure a clean run works
-    open('outputFile.txt', 'w').close()
-    open('tempFile.txt', 'w').close
+    # this clears out the output file to ensure a clean run works
+    open(outputFile, 'w').close()
+
+    # creating a temp file to store the changes made to the output file
+    open("tempFile.txt", 'x').close()
+    tempFile = "tempFile.txt"
 
     # copying the contents of the input file to the temp file
     copyFile(inputFile, tempFile)
@@ -308,11 +311,14 @@ def main():
     copyFile(outputFile, tempFile)
 
     #count the number of times the print keyword is used in the output file
-    print_count = printCounter(tempFile, outputFile)
+    printCounter(tempFile, outputFile)
    
 
     # copy the input file to the output file
     copyInputFile(inputFile, outputFile)
 
+    # deleting the temp file
+    os.remove("tempFile.txt")
+    print("Done")
 if __name__ == "__main__":
     main()
